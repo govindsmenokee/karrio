@@ -1,0 +1,22 @@
+{
+    "PickupCancelResponse": {
+      "Response": {
+        "ResponseStatus": {
+          "Code": "s",
+          "Description": "string"
+        },
+        "Alert": {
+          "Code": "string",
+          "Description": "string"
+        },
+        "TransactionReference": {
+          "CustomerContext": "string"
+        }
+      },
+      "PickupType": "st",
+      "GWNStatus": {
+        "Code": "str",
+        "Description": "string"
+      }
+    }
+  }

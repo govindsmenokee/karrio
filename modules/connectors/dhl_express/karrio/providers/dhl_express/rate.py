@@ -131,7 +131,6 @@ def rate_request(
         options.currency.state
         or units.CountryCurrency[payload.shipper.country_code].value
     )
-
     request = dhl.DCTRequest(
         GetQuote=dhl.GetQuoteType(
             Request=settings.Request(
@@ -148,7 +147,7 @@ def rate_request(
                 City=payload.recipient.city,
             ),
             BkgDetails=dhl.BkgDetailsType(
-                PaymentCountryCode=payload.shipper.country_code,
+                PaymentCountryCode=payload.options.get("account_country_code", None) or payload.shipper.country_code,
                 NetworkTypeCode=provider_units.NetworkType.both_time_and_day_definite.value,
                 WeightUnit=weight_unit.value,
                 DimensionUnit=dim_unit.value,
@@ -216,7 +215,6 @@ def rate_request(
             ),
         ),
     )
-
     return lib.Serializable(
         request,
         _request_serializer,

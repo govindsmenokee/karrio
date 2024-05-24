@@ -59,11 +59,13 @@ def parse_pickup_response(
 def _extract_pickup_details(
     reply: CreatePickupReply, settings: Settings
 ) -> PickupDetails:
-    return PickupDetails(
+    pickup_details = PickupDetails(
         carrier_id=settings.carrier_id,
         carrier_name=settings.carrier_name,
         confirmation_number=reply.PickupConfirmationNumber,
+        package_location=reply.Location
     )
+    return pickup_details
 
 
 def pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
@@ -88,7 +90,6 @@ def pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
 def _pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
     same_day = DF.date(payload.pickup_date).date() == datetime.today().date()
     packages = Packages(payload.parcels, PackagePresets, required=["weight"])
-
     request = CreatePickupRequest(
         WebAuthenticationDetail=settings.webAuthenticationDetail,
         ClientDetail=settings.clientDetail,
@@ -148,12 +149,11 @@ def _pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
         CommodityDescription=None,
         CountryRelationship=None,
     )
-
     return Serializable(request, _request_serializer)
 
 
 def _request_serializer(request: CreatePickupRequest) -> str:
-    envelope: Envelope = create_envelope(body_content=request)
+    envelope: Envelope = create_envelope(body_content=request, envelope_prefix="soapenv")
     envelope.Body.ns_prefix_ = envelope.ns_prefix_
     apply_namespaceprefix(envelope.Body.anytypeobjs_[0], "v22")
 
@@ -168,7 +168,7 @@ def _get_availability(payload: PickupRequest, settings: Settings):
 
     return Job(id="availability", data=data)
 
-
+PickupDetails
 def _create_pickup(
     availability_response: str, payload: PickupRequest, settings: Settings
 ):

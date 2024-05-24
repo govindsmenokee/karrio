@@ -179,6 +179,8 @@ class PickupRequest:
     parcels: List[Parcel] = JList[Parcel]
     instruction: str = None
     package_location: str = None
+    service_name: str = None
+    destination_country_code: str = None
     options: Dict = {}
 
 
@@ -207,6 +209,7 @@ class PickupCancelRequest:
     address: Address = JStruct[Address]
     pickup_date: str = None
     reason: str = None
+    package_location: str = None
 
 
 @attr.s(auto_attribs=True)
@@ -363,6 +366,7 @@ class PickupDetails:
     pickup_charge: ChargeDetails = JStruct[ChargeDetails]
     ready_time: str = None
     closing_time: str = None
+    package_location: str = None
     id: str = None
 
 

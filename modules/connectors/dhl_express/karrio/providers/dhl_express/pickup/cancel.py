@@ -48,6 +48,7 @@ def pickup_cancel_request(
         Reason="006",
         PickupDate=payload.pickup_date,
         CancelTime=time.strftime("%H:%M:%S"),
+        OriginSvcArea=payload.package_location
     )
 
     return lib.Serializable(

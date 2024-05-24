@@ -56,7 +56,7 @@ def pickup_cancel_request(
         PickupConfirmationNumber=payload.confirmation_number,
         ScheduledDate=payload.pickup_date,
         EndDate=None,
-        Location=None,
+        Location=payload.package_location,
         Remarks=None,
         ShippingChargesPayment=None,
         Reason=payload.reason,
@@ -73,7 +73,7 @@ def pickup_cancel_request(
 
 
 def _request_serializer(request: CancelPickupRequest) -> str:
-    envelope: Envelope = create_envelope(body_content=request)
+    envelope: Envelope = create_envelope(body_content=request, envelope_prefix="soapenv")
     envelope.Body.ns_prefix_ = envelope.ns_prefix_
     apply_namespaceprefix(envelope.Body.anytypeobjs_[0], "v22")
 

@@ -19,3 +19,6 @@ quicktype --src="${SCHEMAS}/shipping_request.json" --out="${LIB_MODULES}/shippin
 quicktype --src="${SCHEMAS}/shipping_response.json" --out="${LIB_MODULES}/shipping_response.py"
 quicktype --src="${SCHEMAS}/tracking_response.json" --out="${LIB_MODULES}/tracking_response.py"
 quicktype --src="${SCHEMAS}/shipping_cancel_response.json" --out="${LIB_MODULES}/shipping_cancel_response.py"
+quicktype --src="${SCHEMAS}/pickup_request.json" --out="${LIB_MODULES}/pickup_request.py"
+quicktype --src="${SCHEMAS}/pickup_response.json" --out="${LIB_MODULES}/pickup_response.py"
+quicktype --src="${SCHEMAS}/pickup_cancel_response.json" --out="${LIB_MODULES}/pickup_cancel_response.py"

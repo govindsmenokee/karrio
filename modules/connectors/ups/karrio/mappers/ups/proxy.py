@@ -96,3 +96,27 @@ class Proxy(proxy.Proxy):
         )
 
         return lib.Deserializable(response, lib.to_dict)
+
+    def schedule_pickup(
+        self,
+        request: lib.Serializable,
+    ) -> lib.Deserializable:
+        response = self._send_request(
+            "/api/pickupcreation/v1707/pickup",
+            request,
+        )
+
+        return lib.Deserializable(response, lib.to_dict, request.ctx)
+
+    def cancel_pickup(
+        self,
+        request: lib.Serializable,
+    ) -> lib.Deserializable:
+        headers = {"Prn": request.serialize().get('pickupconfirmationnumber')}
+        response = self._send_request(
+            f"/api/shipments/v1/pickup/02",
+            method="DELETE",
+            headers=headers
+        )
+
+        return lib.Deserializable(response, lib.to_dict)

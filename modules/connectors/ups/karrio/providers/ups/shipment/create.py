@@ -161,6 +161,10 @@ def shipment_request(
             Shipment=ups.ShipmentType(
                 Description=packages.description,
                 ReturnService=None,
+                # ReturnService=ups.LabelImageFormatType(
+                #     Code="9",
+                #     Description="UPS Print Return Label"
+                # ),
                 DocumentsOnlyIndicator=("Y" if packages.is_document else None),
                 Shipper=ups.ShipperType(
                     Name=(shipper.company_name or shipper.person_name),
@@ -174,11 +178,11 @@ def shipment_request(
                     FaxNumber=None,
                     EMailAddress=shipper.email,
                     Address=ups.AlternateDeliveryAddressAddressType(
-                        AddressLine=shipper.address_line,
+                        AddressLine=shipper.address_lines,
                         City=shipper.city,
                         StateProvinceCode=shipper.state_code,
                         PostalCode=shipper.postal_code,
-                        CountryCode=shipper.country_code,
+                        CountryCode='AE',
                         ResidentialAddressIndicator=(
                             "Y" if shipper.is_residential else None
                         ),
@@ -196,7 +200,7 @@ def shipment_request(
                     FaxNumber=None,
                     EMailAddress=recipient.email,
                     Address=ups.AlternateDeliveryAddressAddressType(
-                        AddressLine=recipient.address_line,
+                        AddressLine=recipient.address_lines,
                         City=recipient.city,
                         StateProvinceCode=recipient.state_code,
                         PostalCode=recipient.postal_code,
@@ -218,7 +222,7 @@ def shipment_request(
                     ),
                     FaxNumber=None,
                     Address=ups.AlternateDeliveryAddressAddressType(
-                        AddressLine=shipper.address_line,
+                        AddressLine=shipper.address_lines,
                         City=shipper.city,
                         StateProvinceCode=shipper.state_code,
                         PostalCode=shipper.postal_code,
@@ -428,7 +432,7 @@ def shipment_request(
                                                 or "000-000-0000"
                                             ),
                                             Address=ups.AlternateDeliveryAddressAddressType(
-                                                AddressLine=recipient.address_line,
+                                                AddressLine=recipient.address_lines,
                                                 City=recipient.city,
                                                 StateProvinceCode=recipient.state_code,
                                                 PostalCode=lib.text(
@@ -508,9 +512,7 @@ def shipment_request(
                                 TermsOfShipment=provider_units.Incoterm.map(
                                     customs.incoterm
                                 ).name,
-                                ReasonForExport=provider_units.CustomsContentType.map(
-                                    customs.content_type
-                                ).value,
+                                ReasonForExport=provider_units.CustomsContentType.documents if packages.is_document else provider_units.CustomsContentType.merchandise,
                                 Comments=None,
                                 DeclarationStatement="I hereby certify that the information on this invoice is true and correct and the contents and value of this shipment is as stated above.",
                                 Discount=None,
@@ -549,8 +551,8 @@ def shipment_request(
                         ),
                         DeliveryConfirmation=None,
                         ReturnOfDocumentIndicator=None,
-                        ImportControlIndicator=None,
-                        LabelMethod=None,
+                        ImportControlIndicator='Y' if shipper.country_code != 'AE' else None,
+                        LabelMethod=ups.LabelImageFormatType(Code='05') if shipper.country_code != 'AE' else None,
                         CommercialInvoiceRemovalIndicator=None,
                         UPScarbonneutralIndicator=None,
                         ExchangeForwardIndicator=None,
@@ -572,6 +574,7 @@ def shipment_request(
                 ShipmentDate=None,
                 Package=[
                     ups.PackageType(
+                        Description=package.description,
                         Packaging=ups.LabelImageFormatType(
                             Code=(
                                 mps_packaging

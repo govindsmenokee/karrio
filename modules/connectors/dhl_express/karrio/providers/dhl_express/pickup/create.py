@@ -61,13 +61,13 @@ def _extract_pickup(response: Element, settings: Settings) -> PickupDetails:
         pickup_charge=pickup_charge,
         ready_time=DF.ftime(pickup.ReadyByTime),
         closing_time=DF.ftime(pickup.CallInTime),
+        package_location=pickup.OriginSvcArea
     )
 
 
 def pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
     packages = Packages(payload.parcels)
     address = lib.to_address(payload.address)
-
     request = dhl.BookPURequest(
         Request=settings.Request(
             MetaData=dhl.MetaData(SoftwareName="XMLPI", SoftwareVersion=3.0)
@@ -85,6 +85,9 @@ def pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
                 PhoneExtension=None,
             ),
             CompanyName=address.company_name,
+            Address1=address.street,
+            City=address.city,
+            CountryCode=address.country_code,
         ),
         Place=dhl.Place1(
             City=address.city,
@@ -104,10 +107,11 @@ def pickup_request(payload: PickupRequest, settings: Settings) -> Serializable:
         Pickup=Pickup(
             Pieces=len(payload.parcels),
             PickupDate=payload.pickup_date,
+            PickupTypeCode="A",
             ReadyByTime=f"{payload.ready_time}:00",
             CloseTime=f"{payload.closing_time}:00",
             SpecialInstructions=[payload.instruction],
-            RemotePickupFlag="Y",
+            RemotePickupFlag="N",
             weight=WeightSeg(
                 Weight=packages.weight.value,
                 WeightUnit=DHLWeightUnit[packages.weight.unit].value,

@@ -1,0 +1,57 @@
+{
+    "PickupCreationRequest": {
+      "RatePickupIndicator": "N",
+      "Shipper": {
+        "Account": {
+          "AccountNumber": "ShipperNumber",
+          "AccountCountryCode": "US"
+        }
+      },
+      "PickupDateInfo": {
+        "CloseTime": "1400",
+        "ReadyTime": "0500",
+        "PickupDate": "20221214"
+      },
+      "PickupAddress": {
+        "CompanyName": "Pickup Proxy",
+        "ContactName": "Pickup Manager",
+        "AddressLine": "123 Main Street",
+        "Room": "R01",
+        "Floor": "2",
+        "City": "Allendale",
+        "StateProvince": "NJ",
+        "Urbanization": "",
+        "PostalCode": "07401",
+        "CountryCode": "US",
+        "ResidentialIndicator": "Y",
+        "PickupPoint": "Lobby",
+        "Phone": {
+          "Number": "5555555555",
+          "Extension": "911"
+        }
+      },
+      "AlternateAddressIndicator": "Y",
+      "PickupPiece": [
+        {
+          "ServiceCode": "001",
+          "Quantity": "27",
+          "DestinationCountryCode": "US",
+          "ContainerCode": "01"
+        },
+        {
+          "ServiceCode": "012",
+          "Quantity": "4",
+          "DestinationCountryCode": "US",
+          "ContainerCode": "01"
+        }
+      ],
+      "TotalWeight": {
+        "Weight": "5.5",
+        "UnitOfMeasurement": "LBS"
+      },
+      "OverweightIndicator": "N",
+      "PaymentMethod": "01",
+      "SpecialInstruction": "Test ",
+      "ReferenceNumber": "CreatePickupRef"
+    }
+  }
